@@ -53,3 +53,4 @@ group :development do
   gem "better_errors"
   gem 'guard-rspec', require: false
 end
+gem "haml-rails"
