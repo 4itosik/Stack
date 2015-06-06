@@ -47,6 +47,8 @@ group :test do
   gem 'rspec-rails'
   gem 'factory_girl_rails', :require => false
   gem 'shoulda-matchers'
+  gem 'capybara'
+  gem 'launchy'
 end
 group :development do 
   gem 'guard-livereload', '~> 2.4', require: false
