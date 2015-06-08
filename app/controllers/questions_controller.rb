@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
-  before_action :load_question, only: [:show, :edit, :update]
-
+  before_action :load_question, only: [:show, :edit, :update, :destroy]
+  before_action :owner_question, only: [:edit, :update, :destroy]
 
   def index
     @questions = Question.all
@@ -21,7 +21,9 @@ class QuestionsController < ApplicationController
 
   def create
     @question = Question.new(question_params)
+    @question.user = current_user
     if @question.save
+      flash[:notice] = "Your question successfully created"
       redirect_to @question
     else
       render :new
@@ -30,10 +32,17 @@ class QuestionsController < ApplicationController
 
   def update
     if @question.update(question_params)
+      flash[:notice] = "Your question successfully update"
       redirect_to @question
     else
       render :edit
     end
+  end
+
+  def destroy
+    @question.destroy
+    flash[:notice] = "Your question successfully destroy"
+    redirect_to questions_path
   end
 
   private
@@ -44,4 +53,9 @@ class QuestionsController < ApplicationController
     def question_params
       params.require(:question).permit(:body, :title)
     end
+
+    def owner_question
+      redirect_to root_url, notice: "Access denied" unless @question.user == current_user
+    end
+
 end

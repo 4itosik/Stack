@@ -1,0 +1,33 @@
+%p Question
+%table
+  %thead
+    %tr
+      %td Title
+      %td Body
+  %tbody
+    %tr
+      %td= @question.title
+      %td= @question.body
+%hr/
+Answers:
+%table
+  %thead
+    %tr
+      %td Number
+      %td Body
+      %td
+      %td
+  %thead
+    - @answers.each_with_index do |answer, index|
+      %tr
+        %td= index + 1
+        %td= answer.body
+        %td= link_to "Edit answer", edit_question_answer_path(@question, answer), :class => "btn btn-xs btn-warning" if answer.user == current_user
+        %td= link_to "Delete answer", question_answer_path(@question, answer), :method => :delete, :class => "btn btn-xs btn-destroy" if answer.user == current_user
+- if user_signed_in?
+  %hr/
+  New answer
+  = form_for [@question, @answer] do |f|
+    = f.label  :body
+    = f.text_area :body
+    = f.submit "Save answer"

@@ -1,0 +1,12 @@
+= form_for [@question, @answer] do |f|
+  - if @answer.errors.any?
+    #errorExplanation
+      %h2
+        = pluralize(@answer.errors.count, "error")
+        prohibited this answer from being saved:
+      %ul
+        - @answer.errors.full_messages.each do |msg|
+          %li= msg
+  = f.label  :body
+  = f.text_area :body
+  = f.submit "Save answer"
