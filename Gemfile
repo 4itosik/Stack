@@ -49,6 +49,8 @@ group :test do
   gem 'shoulda-matchers'
   gem 'capybara'
   gem 'launchy'
+  gem 'selenium-webdriver'
+  gem 'database_cleaner'
 end
 group :development do 
   gem 'guard-livereload', '~> 2.4', require: false

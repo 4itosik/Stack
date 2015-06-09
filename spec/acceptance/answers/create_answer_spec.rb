@@ -9,13 +9,14 @@ feature 'Create answer for question', %q{
   given(:user) { create(:user) }
   given(:question) { create(:question) }
 
-  scenario "Authenticated user create the answer" do
+  scenario "Authenticated user create the answer", js: true do
     sign_in(user)
     visit question_path(question)
     fill_in "Body", with: "New test big answer for this question"
     click_on  "Save answer"
-    expect(page).to have_content "You answer successfully created"
-    expect(page).to have_content "New test big answer for this question"
+    within 'table.answers' do
+      expect(page).to have_content "New test big answer for this question"
+    end
   end
 
   scenario "Non-authenticated user create the answer" do
@@ -23,11 +24,13 @@ feature 'Create answer for question', %q{
     expect(page).to_not have_button "Save answer"
   end
 
-  scenario "Authenticated user create the question with invalid attributes" do
+  scenario "Authenticated user create the question with invalid attributes", js: true do
     sign_in(user)
     visit question_path(question)
     fill_in "Body", with: "Small body answer"
     click_on "Save answer"
-    expect(page).to have_content "1 error prohibited this answer from being saved:"
+    within '#answer-form' do
+      expect(page).to have_content "1 error prohibited this answer from being saved:"
+    end
   end
 end

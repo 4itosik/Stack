@@ -22,13 +22,13 @@ describe AnswersController do
     login_user
 
     context "with valid attributes" do
-      before(:each) { |ex| post :create, question_id: question, answer: attributes_for(:answer) unless ex.metadata[:skip] }
+      before(:each) { |ex| post :create, question_id: question, answer: attributes_for(:answer), format: :js unless ex.metadata[:skip] }
       it "save new answer for @question", skip_before: true do
-        expect { post :create, question_id: question, answer: attributes_for(:answer) }.to change(question.answers, :count).by(1)
+        expect { post :create, question_id: question, answer: attributes_for(:answer), format: :js }.to change(question.answers, :count).by(1)
       end
 
-      it "redirect to answer" do
-        expect(response).to redirect_to question_path(question)
+      it "render create template" do
+        expect(response).to render_template :create
       end
 
       it "add answer to user" do
@@ -39,11 +39,11 @@ describe AnswersController do
     context "with invalid attributes" do
       it "not save answer" do
         expect { post :create,  question_id: question,
-                                answer: attributes_for(:invalid_answer) }.to_not change(Answer, :count)
+                                answer: attributes_for(:invalid_answer), format: :js }.to_not change(Answer, :count)
       end
 
       it "render new view" do
-        post :create,  question_id: question, answer: attributes_for(:invalid_answer)
+        post :create,  question_id: question, answer: attributes_for(:invalid_answer), format: :js
         expect(response).to render_template :new
       end
     end

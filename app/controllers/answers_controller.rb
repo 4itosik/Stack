@@ -3,18 +3,15 @@ class AnswersController < ApplicationController
   before_action :load_answer, except: [:create]
   before_action :owner_answer, except: [:create]
 
+  respond_to :js, only: [:create]
+
   def edit
   end
 
   def create
     @answer = @question.answers.new(answer_params)
     @answer.user = current_user
-    if @answer.save
-      flash[:notice] = "You answer successfully created"
-      redirect_to @question
-    else
-      render :new
-    end
+    render :new unless @answer.save
   end
 
   def update
