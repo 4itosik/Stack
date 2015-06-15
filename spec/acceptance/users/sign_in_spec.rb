@@ -1,4 +1,4 @@
-require 'rails_helper'
+require 'acceptance/acceptance_helper.rb'
 
 feature 'Sign in', %q{
         In order to be able ask questions or write answers

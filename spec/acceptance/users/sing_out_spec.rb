@@ -1,4 +1,4 @@
-require "rails_helper"
+require 'acceptance/acceptance_helper.rb'
 
 feature "Sing out", %q{
         In order to be shut down from system

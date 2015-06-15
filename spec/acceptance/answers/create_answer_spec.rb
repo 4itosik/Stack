@@ -1,4 +1,4 @@
-require 'rails_helper'
+require 'acceptance/acceptance_helper.rb'
 
 feature 'Create answer for question', %q{
         In order to add answer for question

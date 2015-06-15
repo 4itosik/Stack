@@ -1,4 +1,4 @@
-require "rails_helper"
+require 'acceptance/acceptance_helper.rb'
 
 feature "Sign up", %q{
         In order to be sign in to system

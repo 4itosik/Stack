@@ -1,4 +1,4 @@
-require "rails_helper"
+require 'acceptance/acceptance_helper.rb'
 
 feature "Show question and answers question", %q{
         In order to show answers for question
