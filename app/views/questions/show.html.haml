@@ -10,20 +10,8 @@
       %td= @question.body
 %hr/
 Answers:
-%table.answers
-  %thead
-    %tr
-      %td Number
-      %td Body
-      %td
-      %td
-  %tbody
-    - @answers.each_with_index do |answer, index|
-      %tr
-        %td= index + 1
-        %td= answer.body
-        %td= link_to "Edit answer", edit_question_answer_path(@question, answer), :class => "btn btn-xs btn-warning" if answer.user == current_user
-        %td= link_to "Delete answer", question_answer_path(@question, answer), :method => :delete, :class => "btn btn-xs btn-danger" if answer.user == current_user
+.answers
+  = render "answers/answers"
 - if user_signed_in?
   %hr/
   New answer

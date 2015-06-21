@@ -1,2 +1,3 @@
-$("table.answers tbody").append("<%= j render "answers/answer"%>");
-$("#answer_body").val('');
+$(".answers").append("<%= j render "answers/answer"%>");
+$("#answer-form #errorExplanation").html("");
+$("#answer-form #answer_body").val('');

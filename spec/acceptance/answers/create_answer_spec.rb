@@ -14,7 +14,7 @@ feature 'Create answer for question', %q{
     visit question_path(question)
     fill_in "Body", with: "New test big answer for this question"
     click_on  "Save answer"
-    within 'table.answers' do
+    within '.answers' do
       expect(page).to have_content "New test big answer for this question"
     end
   end

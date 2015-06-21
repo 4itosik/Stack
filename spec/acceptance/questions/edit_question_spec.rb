@@ -10,7 +10,7 @@ feature "Edit and update question", %q{
   before { create(:question, user: user ) }
   given(:other_user) { create(:user) }
 
-  scenario "Owner user try to delete question" do
+  scenario "Owner user try to edit question" do
     sign_in(user)
     visit questions_path
     click_on "Edit question"
@@ -22,7 +22,7 @@ feature "Edit and update question", %q{
     expect(page).to have_content "New test big body for question"
   end
 
-  scenario "non-owner user try to delete question" do
+  scenario "non-owner user try to edit question" do
     sign_in(other_user)
     visit questions_path
     expect(page).to_not have_content "Edit question"

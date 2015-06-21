@@ -1,9 +1,10 @@
 class AnswersController < ApplicationController
   before_action :load_question
   before_action :load_answer, except: [:create]
-  before_action :owner_answer, except: [:create]
+  before_action :owner_answer, except: [:create, :best, :cancel_best]
+  before_action :owner_question, only: [:best, :cancel_best]
 
-  respond_to :js, only: [:create]
+  respond_to :js
 
   def edit
   end
@@ -15,18 +16,21 @@ class AnswersController < ApplicationController
   end
 
   def update
-    if @answer.update(answer_params)
-      flash[:notice] = "Your answer successfully update"
-      redirect_to question_path(@question)
-    else
-      render :edit
-    end
+    render :edit unless @answer.update(answer_params)
   end
 
   def destroy
     @answer.destroy
-    flash[:notice] = "Your answer successfully destroy"
-    redirect_to @question
+  end
+
+  def best
+    @answer.select_best
+    @answers = @question.answers
+  end
+
+  def cancel_best
+    @answer.cancel_best
+    @answers = @question.answers
   end
 
   private
@@ -44,5 +48,9 @@ class AnswersController < ApplicationController
 
     def owner_answer
       redirect_to root_url, notice: "Access denied" unless @answer.user == current_user
+    end
+
+    def owner_question
+      redirect_to root_url, notice: "Access denied" unless @question.user == current_user
     end
 end
