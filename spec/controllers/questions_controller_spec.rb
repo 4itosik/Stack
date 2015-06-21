@@ -30,11 +30,15 @@ describe QuestionsController do
 
     it "populates an array of all answers in this question" do
       answers = create_list(:answer, 2, question: question)
-      expect(assigns(:answers)).to match_array(answers)
+      expect(assigns(:question).answers).to match_array(answers)
     end
 
     it "assigns a new Answer to @answer for @question" do
       expect(assigns(:answer)).to be_a_new(Answer)
+    end
+
+    it "assigns a new Attachment fot @answer" do
+      expect(assigns(:answer).attachments.first).to be_a_new(Attachment)
     end
   end
 
@@ -44,6 +48,10 @@ describe QuestionsController do
 
     it "assigns a new Question to @question" do
       expect(assigns(:question)).to be_a_new(Question)
+    end
+
+    it "assigns a new Attachment fot @question" do
+      expect(assigns(:question).attachments.first).to be_a_new(Attachment)
     end
 
     it "render new view" do

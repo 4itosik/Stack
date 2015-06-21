@@ -18,7 +18,9 @@ Rails.application.routes.draw do
     resources :answers, except: [:new] do
       post "best", on: :member
       post "cancel_best", on: :member
+      resources :attachments, only: [:destroy]
     end
+    resources :attachments, only: [:destroy]
   end
   # Example resource route with options:
   #   resources :products do

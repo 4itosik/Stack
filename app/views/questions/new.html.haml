@@ -13,4 +13,10 @@
   = f.label :body
   = f.text_area :body
 
-  =f.submit "Add question"
+  %p Attachments
+  #attachmetns
+    = f.fields_for  :attachments do |a|
+      = render partial: 'questions/attachment_fields', locals: {f: a}
+      %hr/
+    %p= link_to_add_association 'Еще файл', f, :attachments, class: "btn btn-sm btn-success"
+  %p=f.submit "Add question"

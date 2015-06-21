@@ -8,6 +8,12 @@
     %tr
       %td= @question.title
       %td= @question.body
+%p Attachments
+%ul
+  - @question.attachments.each do |attachment|
+    %li{id: "attachment_#{attachment.id}"}
+      %p= link_to attachment.file.identifier, attachment.file.url
+      %p= link_to "Delete attachment", polymorphic_path([@question, attachment]),remote: true, :method => :delete, class: "btn btn-sm btn-danger" if user_signed_in? && @question.user == current_user
 %hr/
 Answers:
 .answers

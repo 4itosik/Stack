@@ -1,12 +1,16 @@
 class Answer < ActiveRecord::Base
   default_scope { order('best DESC') }
 
+  belongs_to            :question
+  belongs_to            :user
+
+  has_many              :attachments, as: :attachable, dependent: :destroy
+
   validates             :body, presence: true, length: { minimum: 30, maximum: 350 }
   validates             :question, presence: true
   validates             :user, presence: true
 
-  belongs_to            :question
-  belongs_to            :user
+  accepts_nested_attributes_for :attachments, :reject_if => :all_blank, :allow_destroy => true
 
   def select_best
     transaction do

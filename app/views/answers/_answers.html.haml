@@ -1,4 +1,4 @@
-- @answers.each do |answer|
+- @question.answers.each do |answer|
   .answer{:id => "answer_#{answer.id}"}
     %p
       - if answer.best == false && @question.user == current_user
@@ -8,6 +8,12 @@
       - elsif answer.best == true
         Лучший ответ
     %p= answer.body
+    %p Attachments
+    %ul
+    - answer.attachments.each do |attachment|
+      %li{id: "attachment_#{attachment.id}"}
+        %p= link_to attachment.file.identifier, attachment.file.url
+        %p= link_to "Delete attachment", polymorphic_path([@question, answer, attachment]),remote: true, :method => :delete, class: "btn btn-sm btn-danger" if user_signed_in? && answer.user == current_user
     %p= link_to "Edit answer", "#", :class => "btn btn-xs btn-warning edit-answer-link", data: { answer_id: answer.id } if answer.user == current_user
     %p= link_to "Delete answer", question_answer_path(@question, answer), remote: true, :method => :delete, :class => "btn btn-xs btn-danger" if answer.user == current_user
     %p
@@ -15,3 +21,4 @@
         = f.label :body, "Answer"
         = f.text_area :body
         = f.submit "Update answer"
+
