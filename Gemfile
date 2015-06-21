@@ -59,3 +59,6 @@ group :development do
 end
 gem "haml-rails"
 gem "devise"
+gem 'carrierwave'
+gem 'remotipart'
+gem "cocoon"
