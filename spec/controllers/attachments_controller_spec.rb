@@ -44,11 +44,11 @@ describe AttachmentsController do
         let!(:attachment) { create(:attachment, attachable: answer) }
 
         it "delete attachment" do
-          expect{ delete :destroy, question_id: question, answer_id: answer, id: attachment, format: :js }.to change(answer.attachments, :count).by(-1)
+          expect{ delete :destroy, answer_id: answer, id: attachment, format: :js }.to change(answer.attachments, :count).by(-1)
         end
 
         it "render destroy template" do
-          delete :destroy, question_id: question, answer_id: answer, id: attachment, format: :js
+          delete :destroy, answer_id: answer, id: attachment, format: :js
           expect(response).to render_template :destroy
         end
       end
@@ -61,11 +61,11 @@ describe AttachmentsController do
         login_user
 
         it "does not delete attachment" do
-          expect{ delete :destroy, question_id: question, answer_id: answer, id: attachment, format: :js }.to_not change(Attachment, :count)
+          expect{ delete :destroy, answer_id: answer, id: attachment, format: :js }.to_not change(Attachment, :count)
         end
 
         it "redirect to root path" do
-          delete :destroy, question_id: question, answer_id: answer, id: attachment, format: :js
+          delete :destroy, answer_id: answer, id: attachment, format: :js
           expect(response).to redirect_to root_path
         end
 

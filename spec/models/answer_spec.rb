@@ -11,9 +11,8 @@ describe Answer do
   it { should belong_to :question }
   it { should belong_to :user }
 
-  it { should have_many(:attachments).dependent(:destroy) }
-
-  it { should accept_nested_attributes_for :attachments }
+  it_should_behave_like "attachable"
+  it_should_behave_like "voteable"
 
   describe "#select best" do
     let(:question) { create(:question) }
@@ -36,5 +35,4 @@ describe Answer do
     answer.cancel_best
     expect(answer.best).to be false
   end
-
 end

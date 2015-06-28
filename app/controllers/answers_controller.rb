@@ -1,10 +1,11 @@
 class AnswersController < ApplicationController
-  before_action :load_question
-  before_action :load_answer, except: [:create]
-  before_action :owner_answer, except: [:create, :best, :cancel_best]
+  before_action :load_question, only: [:create]
+  before_action :load_answer, only: [:edit, :update, :best, :cancel_best, :destroy]
+  before_action :set_question, only: [:best, :cancel_best, :update]
+  before_action :owner_answer, only: [:edit, :update, :destroy]
   before_action :owner_question, only: [:best, :cancel_best]
 
-  respond_to :js
+  include Voted
 
   def edit
   end
@@ -43,7 +44,11 @@ class AnswersController < ApplicationController
     end
 
     def load_answer
-      @answer = @question.answers.find(params[:id])
+      @answer = Answer.find(params[:id])
+    end
+
+    def set_question
+      @question = @answer.question
     end
 
     def owner_answer

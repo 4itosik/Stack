@@ -1,13 +1,15 @@
 require 'rails_helper'
 
 describe AnswersController do
+  it_should_behave_like "voted"
+
   let(:question) { create(:question) }
   let(:answer) { create(:answer, question: question)}
 
   describe "GET #edit" do
     login_user
     let(:answer) { create(:answer, question: question, user: @user) }
-    before { get :edit, question_id: question, id: answer }
+    before { get :edit, id: answer }
 
     it "assigns the requested answer to @answer for @question" do
       expect(assigns(:answer)).to eq answer
@@ -53,10 +55,10 @@ describe AnswersController do
     login_user
 
     context "owner answer" do
-      let(:answer) { create(:answer, question: question, user: @user) }
+      let(:answer) { create(:answer, user: @user) }
 
       context "with valid attributes" do
-        before { patch :update, question_id: question, id: answer, answer: { body: "Changes new big body for answer" }, format: :js }
+        before { patch :update, id: answer, answer: { body: "Changes new big body for answer" }, format: :js }
 
         it "assigns the requested answer for @answer for @question" do
           expect(assigns(:answer)).to eq answer
@@ -73,7 +75,7 @@ describe AnswersController do
       end
 
       context "with invalid attributes" do
-        before { patch :update, question_id: question, id: answer, answer: { body: "Shot body" }, format: :js }
+        before { patch :update, id: answer, answer: { body: "Shot body" }, format: :js }
 
         it "do not change answer attributes" do
           answer.reload
@@ -89,7 +91,7 @@ describe AnswersController do
     context "non-owner answer" do
       let(:owner_user) { create(:user) }
       let(:answer) { create(:answer, question: question, user: owner_user) }
-      before { patch :update, question_id: question, id: answer, answer: { body: "Changes new big body for answer" }, format: :js }
+      before { patch :update, id: answer, answer: { body: "Changes new big body for answer" }, format: :js }
 
       it "does not change answer attributes" do
         answer.reload
@@ -111,11 +113,11 @@ describe AnswersController do
       before { answer }
 
       it "delete answer" do
-        expect{ delete :destroy, question_id: question, id: answer, format: :js }.to change(question.answers, :count).by(-1)
+        expect{ delete :destroy, id: answer, format: :js }.to change(question.answers, :count).by(-1)
       end
 
       it "render destroy template" do
-        delete :destroy, question_id: question, id: answer, format: :js
+        delete :destroy, id: answer, format: :js
         expect(response).to render_template :destroy
       end
     end
@@ -128,11 +130,11 @@ describe AnswersController do
       login_user
 
       it "does not delete question" do
-        expect{ delete :destroy, question_id: question, id: answer, format: :js }.to_not change(Answer, :count)
+        expect{ delete :destroy, id: answer, format: :js }.to_not change(Answer, :count)
       end
 
       it "redirect to root path" do
-        delete :destroy, question_id: question, id: answer, format: :js
+        delete :destroy, id: answer, format: :js
         expect(response).to redirect_to root_path
       end
 
@@ -145,7 +147,7 @@ describe AnswersController do
       let(:question) { create(:question, user: @user) }
       let(:answer) { create(:answer, question: question) }
 
-      before { post :best, question_id: question, id: answer, format: :js }
+      before { post :best, id: answer, format: :js }
 
       it "best answer" do
         expect(answer.reload.best).to be_truthy
@@ -162,7 +164,7 @@ describe AnswersController do
       let(:answer) { create(:answer, question: question) }
       login_user
       it "redirect to root path" do
-        post :best, question_id: question, id: answer, format: :js
+        post :best, id: answer, format: :js
         expect(response).to redirect_to root_path
       end
     end
@@ -176,7 +178,7 @@ describe AnswersController do
       let(:question) { create(:question, user: @user) }
       let(:best_answer) { create(:answer, question: question, best: true) }
 
-      before { post :cancel_best, question_id: question, id: answer, format: :js }
+      before { post :cancel_best, id: answer, format: :js }
 
       it "cancel best answer" do
         expect(answer.reload.best).to be false
@@ -193,7 +195,7 @@ describe AnswersController do
       let(:answer) { create(:answer, question: question) }
       login_user
       it "redirect to root path" do
-        post :cancel_best, question_id: question, id: answer, format: :js
+        post :cancel_best, id: answer, format: :js
         expect(response).to redirect_to root_path
       end
     end

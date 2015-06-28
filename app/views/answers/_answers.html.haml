@@ -1,10 +1,18 @@
 - @question.answers.each do |answer|
   .answer{:id => "answer_#{answer.id}"}
+    %p.total_votes= answer.total_votes
+    %p.votes
+      - if user_signed_in? && answer.user != current_user
+        - if current_user.vote_for(answer)
+          = link_to "Cancel", cancel_vote_answer_path(answer), method: :delete, remote: true, class: 'vote-cancel', data: { type: :json }
+        - else
+          = link_to "Like", like_answer_path(answer), method: :post, remote: true, data: { type: :json }, class: "vote"
+          = link_to "Dislike", dislike_answer_path(answer), method: :post, remote: true, data: { type: :json }, class: "vote"
     %p
       - if answer.best == false && @question.user == current_user
-        = link_to "Выбрать лучшим", best_question_answer_path(@question, answer), remote: true, method: :post
+        = link_to "Выбрать лучшим", best_answer_path(answer), remote: true, method: :post
       - elsif answer.best == true && @question.user == current_user
-        = link_to "Отменить лучший ответ", cancel_best_question_answer_path(@question, answer), remote: true, method: :post
+        = link_to "Отменить лучший ответ", cancel_best_answer_path(answer), remote: true, method: :post
       - elsif answer.best == true
         Лучший ответ
     %p= answer.body
@@ -13,11 +21,11 @@
     - answer.attachments.each do |attachment|
       %li{id: "attachment_#{attachment.id}"}
         %p= link_to attachment.file.identifier, attachment.file.url
-        %p= link_to "Delete attachment", polymorphic_path([@question, answer, attachment]),remote: true, :method => :delete, class: "btn btn-sm btn-danger" if user_signed_in? && answer.user == current_user
+        %p= link_to "Delete attachment", attachment_path(attachment),remote: true, :method => :delete, class: "btn btn-sm btn-danger" if user_signed_in? && answer.user == current_user
     %p= link_to "Edit answer", "#", :class => "btn btn-xs btn-warning edit-answer-link", data: { answer_id: answer.id } if answer.user == current_user
-    %p= link_to "Delete answer", question_answer_path(@question, answer), remote: true, :method => :delete, :class => "btn btn-xs btn-danger" if answer.user == current_user
+    %p= link_to "Delete answer", answer_path(answer), remote: true, :method => :delete, :class => "btn btn-xs btn-danger" if answer.user == current_user
     %p
-      = form_for [@question, answer], remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
+      = form_for answer, remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
         = f.label :body, "Answer"
         = f.text_area :body
         = f.submit "Update answer"

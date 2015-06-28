@@ -14,13 +14,23 @@ Rails.application.routes.draw do
 
   # Example resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
-  resources :questions do
-    resources :answers, except: [:new] do
+  concern :voteable do
+    member do
+      post    :like
+      post    :dislike
+      delete  :cancel_vote
+    end
+  end
+
+  resources :questions, concerns: [:voteable] do
+    resources :answers, except: [:new], concerns: [:voteable], shallow: true do
       post "best", on: :member
       post "cancel_best", on: :member
       resources :attachments, only: [:destroy]
+      resources :votes, only: [:destroy]
     end
     resources :attachments, only: [:destroy]
+    resources :votes, only: [:destroy], shallow: true
   end
   # Example resource route with options:
   #   resources :products do

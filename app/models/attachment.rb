@@ -1,7 +1,7 @@
 class Attachment < ActiveRecord::Base
   belongs_to :attachable, polymorphic: true
 
-  validates :file, :attachable, presence: true
+  validates :file, presence: true
 
   after_destroy :delete_files
 

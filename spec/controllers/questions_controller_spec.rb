@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 describe QuestionsController do
+  it_should_behave_like "voted"
+
   let(:question) { create(:question) }
 
   describe "GET #index" do
@@ -196,4 +198,5 @@ describe QuestionsController do
     end
 
   end
+
 end
