@@ -35,3 +35,6 @@ Answers:
   New answer
   #answer-form
     = render "answers/form"
+
+
+= subscribe_to "/questions/#{@question.id}/answers"

@@ -1,7 +1,9 @@
-<% if remotipart_submitted? %>
+<% publish_to "/questions/#{@question.id}/answers" do %>
+  <% if remotipart_submitted? %>
     $(".answers").append("<%=  j "#{render partial: "answers/answer", locals: {answer: @answer}}" %>");
-<% else %>
+  <% else %>
     $('.answers').append("<%=  j render partial: "answers/answer", locals: {answer: @answer} %>");
+  <% end %>
 <% end %>
 $("#answer-form #errorExplanation").html("");
 $("#answer-form #answer_body").val('');
