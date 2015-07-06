@@ -1,1 +1,1 @@
-$("form#edit-answer-<%= @answer.id%>").html("<%= j render "answers/edit_form"%>");
+$("#answer_<%= @answer.id%>").find(".edit-answer").html("<%=  j render partial: 'answers/edit_form' %>");

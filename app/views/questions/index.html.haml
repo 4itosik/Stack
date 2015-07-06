@@ -1,6 +1,6 @@
 %p= link_to "Add question", new_question_path
 
-%table
+%table.questions
   %thead
     %tr
       %td Title
@@ -14,3 +14,5 @@
         %td= question.body
         %td= link_to "Edit question", edit_question_path(question), :class => "btn btn-xs btn-warning" if question.user == current_user
         %td= link_to "Delete question", question_path(question), :method => :delete, :class => "btn btn-xs btn-destroy" if question.user == current_user
+
+= subscribe_to "/questions"

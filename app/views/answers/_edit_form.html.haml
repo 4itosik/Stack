@@ -12,7 +12,7 @@
   %p Attachments
   #attachmetns
   = f.fields_for  :attachments do |a|
-    = render partial: 'questions/attachment_fields', locals: {f: a}
+    = render partial: "questions/attachment_fields", locals: {f: a}
     %hr/
     %p= link_to_add_association 'Еще файл', f, :attachments, class: "btn btn-sm btn-success"
-  = f.submit "Save answer"
+  = f.submit "Update answer"

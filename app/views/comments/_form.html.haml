@@ -1,0 +1,13 @@
+= form_for shallow_path(@commentable, @comment), remote: true do |f|
+  - if @comment.errors.any?
+    #errorExplanation
+      %h2
+        = pluralize(@comment.errors.count, "error")
+        prohibited this comment from being saved:
+      %ul
+        - @comment.errors.full_messages.each do |msg|
+          %li= msg
+  = f.label  :body
+  = f.text_area :body
+
+  = f.submit "Написать"

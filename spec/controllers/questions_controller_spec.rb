@@ -79,14 +79,14 @@ describe QuestionsController do
     login_user
 
     context "with valid attributes" do
-      before(:each) { |ex| post :create, question: attributes_for(:question) unless ex.metadata[:skip] }
+      before(:each) { |ex| post :create, question: attributes_for(:question), format: :js unless ex.metadata[:skip] }
 
       it "save new question", skip_before: true do
-        expect { post :create, question: attributes_for(:question) }.to change(Question, :count).by(1)
+        expect { post :create, question: attributes_for(:question), format: :js }.to change(Question, :count).by(1)
       end
 
-      it "redirect to show view" do
-        expect(response).to redirect_to question_path(assigns(:question))
+      it "render create" do
+        expect(response).to render_template :create
       end
 
       it "add question to user" do
@@ -96,7 +96,7 @@ describe QuestionsController do
 
     context "with invalid attributes" do
       it "not save question" do
-        expect { post :create, question: attributes_for(:invalid_question) }.to_not change(Question, :count)
+        expect { post :create, question: attributes_for(:invalid_question), format: :js }.to_not change(Question, :count)
       end
 
       it "re-render new view" do

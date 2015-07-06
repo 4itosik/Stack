@@ -1,34 +1,27 @@
 %p Question
-.col-xs-12
-  %table.table-bordered.table-hover
-    %thead
-      %tr
-        %td Votes
-        %td Title
-        %td Body
-    %tbody
-      %tr{:id => "question_#{@question.id}"}
-        %td
-          .total_votes
-            = @question.total_votes
-          .votes
-            - if user_signed_in? && @question.user != current_user
-              - if current_user.vote_for(@question)
-                = link_to "Cancel", cancel_vote_question_path(@question), method: :delete, remote: true, class: 'vote-cancel', data: { type: :json }
-              - else
-                = link_to "Like", like_question_path(@question), method: :post, remote: true, data: { type: :json }, class: "vote"
-                = link_to "Dislike", dislike_question_path(@question), method: :post, remote: true, data: { type: :json }, class: "vote"
-        %td= @question.title
-        %td= @question.body
-%p Attachments
-%ul
-  - @question.attachments.each do |attachment|
-    %li{id: "attachment_#{attachment.id}"}
-      %p= link_to attachment.file.identifier, attachment.file.url
-      %p= link_to "Delete attachment", polymorphic_path([@question, attachment]),remote: true, :method => :delete, class: "btn btn-sm btn-danger" if user_signed_in? && @question.user == current_user
+.col-xs-12{:id => "question_#{@question.id}"}
+
+  %p.total_votes= @question.total_votes
+  %p.votes
+    - if user_signed_in? && @question.user != current_user
+      - if current_user.vote_for(@question)
+        = link_to "Cancel", cancel_vote_question_path(@question), method: :delete, remote: true, class: 'vote-cancel', data: { type: :json }
+      - else
+        = link_to "Like", like_question_path(@question), method: :post, remote: true, data: { type: :json }, class: "vote"
+        = link_to "Dislike", dislike_question_path(@question), method: :post, remote: true, data: { type: :json }, class: "vote"
+  %p= @question.title
+  %p= @question.body
+
+  %p Attachments
+  %ul
+    - @question.attachments.each do |attachment|
+      %li{id: "attachment_#{attachment.id}"}
+        %p= link_to attachment.file.identifier, attachment.file.url
+        %p= link_to "Delete attachment", polymorphic_path([@question, attachment]),remote: true, :method => :delete, class: "btn btn-sm btn-danger" if user_signed_in? && @question.user == current_user
+  = render partial: "comments/commentable", locals: { commentable: @question }
 %hr/
 Answers:
-.answers
+.col-xs-12.answers
   = render "answers/answers"
 - if user_signed_in?
   %hr/

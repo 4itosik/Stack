@@ -1,0 +1,22 @@
+= form_for @question, remote: true do |f|
+  - if @question.errors.any?
+    #errorExplanation
+      %h2
+        = pluralize(@question.errors.count, "error")
+        prohibited this question from being saved:
+      %ul
+        - @question.errors.full_messages.each do |msg|
+          %li= msg
+  = f.label :title
+  = f.text_field  :title
+
+  = f.label :body
+  = f.text_area :body
+
+  %p Attachments
+  #attachmetns
+    = f.fields_for  :attachments do |a|
+      = render partial: 'questions/attachment_fields', locals: {f: a}
+      %hr/
+    %p= link_to_add_association 'Еще файл', f, :attachments, class: "btn btn-sm btn-success"
+  %p=f.submit "Add question"

@@ -1,0 +1,4 @@
+$("#<%= @commentable.class.to_s.downcase%>_<%= @commentable.id%> .comment-form").html("");
+<% publish_to "/questions/#{question_id(@comment)}/answers" do %>
+  $("#<%= @commentable.class.to_s.downcase%>_<%= @commentable.id%> .comments").append("<%= j render partial: 'comments/comment'%>");
+<% end %>

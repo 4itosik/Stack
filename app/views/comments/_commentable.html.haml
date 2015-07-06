@@ -1,0 +1,8 @@
+= link_to "Написать комментарий", new_polymorphic_path([commentable, Comment]), remote: true if user_signed_in?
+%hr/
+.comments
+  - commentable.comments.each do |comment|
+    .comment
+      %p= comment.user.email
+      %p= comment.body
+.comment-form

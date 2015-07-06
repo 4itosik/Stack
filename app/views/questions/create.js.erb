@@ -1,0 +1,4 @@
+$(window.location.replace("/questions/<%= @question.id %>"));
+<% publish_to "/questions" do %>
+  $('table.questions tbody').append("<%=  j render partial: "questions/question" %>");
+<% end %>

@@ -13,6 +13,7 @@ describe Answer do
 
   it_should_behave_like "attachable"
   it_should_behave_like "voteable"
+  it_should_behave_like "commentable"
 
   describe "#select best" do
     let(:question) { create(:question) }

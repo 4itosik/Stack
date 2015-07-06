@@ -1,9 +1,20 @@
 <% publish_to "/questions/#{@question.id}/answers" do %>
-  <% if remotipart_submitted? %>
-    $(".answers").append("<%=  j "#{render partial: "answers/answer", locals: {answer: @answer}}" %>");
-  <% else %>
-    $('.answers').append("<%=  j render partial: "answers/answer", locals: {answer: @answer} %>");
-  <% end %>
+  $('.answers').append("<%=  j render partial: "answers/answer", locals: {answer: @answer} %>");
+
+  var user = $(".variables").data('user-id');
+  var answer = $("#answer_<%= @answer.id%>");
+
+  if (user == <%= @question.user.id%>){
+    answer.find(".best-control").html('<a data-remote=\"true\" rel=\"nofollow\" data-method=\"post\" href=\"\/answers\/<%= @answer.id %>\/best\">Выбрать лучшим<\/a>')
+  }
+  if (user == undefined || user != <%= @answer.user.id%>){
+    answer.find(".attachments .btn-danger").remove();
+    answer.find(".controls").remove();
+  }
+  if (user != undefined && user != <%= @answer.user.id%>) {
+    answer.find(".votes").html('<a data-type=\"json\" class=\"vote\" data-remote=\"true\" rel=\"nofollow\" data-method=\"post\" href=\"\/answers\/<%= @answer.id%>\/like\">Like<\/a> <a data-type=\"json\" class=\"vote\" data-remote=\"true\" rel=\"nofollow\" data-method=\"post\" href=\"\/answers\/<%= @answer.id%>\/dislike\">Dislike<\/a>');
+    voting();
+  }
 <% end %>
 $("#answer-form #errorExplanation").html("");
 $("#answer-form #answer_body").val('');

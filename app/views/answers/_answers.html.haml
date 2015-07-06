@@ -17,16 +17,14 @@
         Лучший ответ
     %p= answer.body
     %p Attachments
-    %ul
-    - answer.attachments.each do |attachment|
-      %li{id: "attachment_#{attachment.id}"}
-        %p= link_to attachment.file.identifier, attachment.file.url
-        %p= link_to "Delete attachment", attachment_path(attachment),remote: true, :method => :delete, class: "btn btn-sm btn-danger" if user_signed_in? && answer.user == current_user
-    %p= link_to "Edit answer", "#", :class => "btn btn-xs btn-warning edit-answer-link", data: { answer_id: answer.id } if answer.user == current_user
-    %p= link_to "Delete answer", answer_path(answer), remote: true, :method => :delete, :class => "btn btn-xs btn-danger" if answer.user == current_user
-    %p
-      = form_for answer, remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
-        = f.label :body, "Answer"
-        = f.text_area :body
-        = f.submit "Update answer"
+    %ul.attachments
+      - answer.attachments.each do |attachment|
+        %li{id: "attachment_#{attachment.id}"}
+          %p= link_to attachment.file.identifier, attachment.file.url
+          %p= link_to "Delete attachment", attachment_path(attachment),remote: true, :method => :delete, class: "btn btn-sm btn-danger" if user_signed_in? && answer.user == current_user
 
+    .controls
+      %p= link_to "Edit answer", edit_answer_path(answer), :class => "btn btn-xs btn-warning", remote: true if answer.user == current_user if answer.user == current_user
+      %p= link_to "Delete answer", answer_path(answer), remote: true, :method => :delete, :class => "btn btn-xs btn-danger" if answer.user == current_user
+    %p.edit-answer
+    = render partial: "comments/commentable", locals: { commentable: answer }

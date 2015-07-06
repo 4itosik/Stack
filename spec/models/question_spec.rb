@@ -15,4 +15,5 @@ describe Question do
 
   it_should_behave_like "attachable"
   it_should_behave_like "voteable"
+  it_should_behave_like "commentable"
 end

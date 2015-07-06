@@ -1,10 +1,13 @@
-ready = ->
+window.voting = ->
   $(".vote").bind 'ajax:success', (e, data, status, xhr) ->
     controller_data = $.parseJSON(xhr.responseText)
     vote = controller_data.vote
     total_votes = controller_data.total_votes
     $("#" + vote.voteable_type.toLowerCase() + "_" + vote.voteable_id).find(".votes").html '<a class=\"vote-cancel\" data-type=\"json\" data-remote=\"true\" rel=\"nofollow\" data-method=\"delete\" href=\"\/' + vote.voteable_type.toLowerCase() + 's' + '\/' + vote.voteable_id + '\/cancel_vote\">Cancel<\/a>'
     $("#" + vote.voteable_type.toLowerCase() + "_" + vote.voteable_id).find(".total_votes").html total_votes
+
+ready = ->
+  voting()
 
   $(".vote-cancel").bind 'ajax:success', (e, data, status, xhr) ->
     controller_data = $.parseJSON(xhr.responseText)

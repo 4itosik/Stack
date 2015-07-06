@@ -27,7 +27,6 @@ class QuestionsController < ApplicationController
     @question.user = current_user
     if @question.save
       flash[:notice] = "Your question successfully created"
-      redirect_to @question
     else
       render :new
     end

@@ -8,7 +8,7 @@ feature 'Create question', %q{
 
   given(:user) { create(:user) }
 
-  scenario "Authenticated user create the question" do
+  scenario "Authenticated user create the question", js: true do
     sign_in(user)
     visit questions_path
     click_on "Add question"
@@ -26,7 +26,7 @@ feature 'Create question', %q{
     expect(page).to have_content "You need to sign in or sign up before continuing."
   end
 
-  scenario "Authenticated user create the question with invalid attributes" do
+  scenario "Authenticated user create the question with invalid attributes", js: true do
     sign_in(user)
     visit questions_path
     click_on "Add question"

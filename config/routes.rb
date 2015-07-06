@@ -28,9 +28,11 @@ Rails.application.routes.draw do
       post "cancel_best", on: :member
       resources :attachments, only: [:destroy]
       resources :votes, only: [:destroy]
+      resources :comments, only: [:new, :create], defaults: { commentable: 'answers' }
     end
     resources :attachments, only: [:destroy]
     resources :votes, only: [:destroy], shallow: true
+    resources :comments, only: [:new, :create], defaults: { commentable: 'questions' }
   end
   # Example resource route with options:
   #   resources :products do

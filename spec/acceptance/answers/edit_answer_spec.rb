@@ -33,15 +33,17 @@ feature "Edit and update answer", %q{
   scenario "Owner user try to edit answer with invalid attributes", js: true do
     sign_in(user)
     visit question_path(question)
+
     click_on "Edit answer"
     within ".answers" do
       fill_in "Body", with: "Small bady"
     end
     click_on "Update answer"
+
     within "#answer_#{answer.id}" do
       expect(page).to have_content "Test big body for answer"
     end
-    within "#edit-answer-#{answer.id}" do
+    within "#answer_#{answer.id} form" do
       expect(page).to have_content "1 error prohibited this answer from being saved:"
     end
   end
