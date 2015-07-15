@@ -1,18 +1,11 @@
-= form_for [@question, @answer], remote: true do |f|
-  - if @answer.errors.any?
-    #errorExplanation
-      %h2
-        = pluralize(@answer.errors.count, "error")
-        prohibited this answer from being saved:
-      %ul
-        - @answer.errors.full_messages.each do |msg|
-          %li= msg
+= form_for [@question, @question.answers.build], remote: true do |f|
+  .answer-errors
   = f.label  :body
   = f.text_area :body
   %p Attachments
   #attachmetns
-  = f.fields_for  :attachments do |a|
-    = render partial: 'questions/attachment_fields', locals: {f: a}
-    %hr/
-    %p= link_to_add_association 'Еще файл', f, :attachments, class: "btn btn-sm btn-success"
+    = f.fields_for  :attachments, @question.answers.build do |a|
+      = render partial: 'questions/attachment_fields', locals: {f: a}
+      %hr/
+      %p= link_to_add_association 'Еще файл', f, :attachments, class: "btn btn-sm btn-success"
   = f.submit "Save answer"

@@ -1,21 +1,27 @@
-<% publish_to "/questions/#{@question.id}/answers" do %>
-  $('.answers').append("<%=  j render partial: "answers/answer", locals: {answer: @answer} %>");
+$("#answer-form .answer-errors").html("");
+<% if @answer.errors.any?%>
+  <% @answer.errors.full_messages.each do |message| %>
+    $("#answer-form .answer-errors").prepend('<li><%= j message %></li>');
+  <% end %>
+<% else %>
+  <% publish_to "/questions/#{@question.id}/answers" do %>
+    $('.answers').append("<%=  j render partial: "answers/answer", locals: {answer: @answer} %>");
 
-  var user = $(".variables").data('user-id');
-  var answer = $("#answer_<%= @answer.id%>");
+    var user = $(".variables").data('user-id');
+    var answer = $("#answer_<%= @answer.id%>");
 
-  if (user == <%= @question.user.id%>){
-    answer.find(".best-control").html('<a data-remote=\"true\" rel=\"nofollow\" data-method=\"post\" href=\"\/answers\/<%= @answer.id %>\/best\">Выбрать лучшим<\/a>')
-  }
-  if (user == undefined || user != <%= @answer.user.id%>){
-    answer.find(".attachments .btn-danger").remove();
-    answer.find(".controls").remove();
-  }
-  if (user != undefined && user != <%= @answer.user.id%>) {
-    answer.find(".votes").html('<a data-type=\"json\" class=\"vote\" data-remote=\"true\" rel=\"nofollow\" data-method=\"post\" href=\"\/answers\/<%= @answer.id%>\/like\">Like<\/a> <a data-type=\"json\" class=\"vote\" data-remote=\"true\" rel=\"nofollow\" data-method=\"post\" href=\"\/answers\/<%= @answer.id%>\/dislike\">Dislike<\/a>');
-    voting();
-  }
+    if (user == <%= @question.user.id%>){
+      answer.find(".best-control").html('<a data-remote=\"true\" rel=\"nofollow\" data-method=\"post\" href=\"\/answers\/<%= @answer.id %>\/best\">Выбрать лучшим<\/a>')
+    }
+    if (user == undefined || user != <%= @answer.user.id%>){
+      answer.find(".attachments .btn-danger").remove();
+      answer.find(".controls").remove();
+    }
+    if (user != undefined && user != <%= @answer.user.id%>) {
+      answer.find(".votes").html('<a data-type=\"json\" class=\"vote\" data-remote=\"true\" rel=\"nofollow\" data-method=\"post\" href=\"\/answers\/<%= @answer.id%>\/like\">Like<\/a> <a data-type=\"json\" class=\"vote\" data-remote=\"true\" rel=\"nofollow\" data-method=\"post\" href=\"\/answers\/<%= @answer.id%>\/dislike\">Dislike<\/a>');
+      voting();
+    }
+  <% end %>
+  $("#answer-form #answer_body").val('');
+  $("#answer-form .remove_fields").click();
 <% end %>
-$("#answer-form #errorExplanation").html("");
-$("#answer-form #answer_body").val('');
-$("#answer-form .remove_fields").click();

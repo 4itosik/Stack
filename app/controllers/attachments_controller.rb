@@ -5,7 +5,7 @@ class AttachmentsController < ApplicationController
   respond_to  :js
 
   def destroy
-    @attachment.destroy
+    respond_with(@attachment.destroy)
   end
 
   private

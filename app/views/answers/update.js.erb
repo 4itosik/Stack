@@ -1,1 +1,5 @@
-$("#answer_<%= @answer.id %>").html("<%= j render partial: "answers/answer", locals: {answer: @answer} %>");
+<%if @answer.errors.any?%>
+  $("#answer_<%= @answer.id%>").find(".edit-answer").html("<%=  j render partial: 'answers/edit_form' %>");
+<% else %>
+  $("#answer_<%= @answer.id %>").html("<%= j render partial: "answers/answer", locals: {answer: @answer} %>");
+<% end %>

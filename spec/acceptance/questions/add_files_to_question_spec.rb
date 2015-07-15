@@ -18,6 +18,7 @@ feature "Add file to question", %q{
     fill_in "Body", with: "Test body Test body Test body "
 
     click_on "Еще файл"
+    click_on "Еще файл"
 
     inputs = all('input[type="file"]')
     inputs[0].set("#{Rails.root}/public/robots.txt")

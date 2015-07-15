@@ -10,3 +10,9 @@ en:
       destroy:
         notice: '%{resource_name} was successfully destroyed.'
         alert: '%{resource_name} could not be destroyed.'
+
+    questions:
+      update:
+        notice: "Your question successfully update"
+      destroy:
+        notice: "Your question successfully destroy"

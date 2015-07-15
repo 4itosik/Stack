@@ -1,4 +1,8 @@
-$(window.location.replace("/questions/<%= @question.id %>"));
-<% publish_to "/questions" do %>
-  $('table.questions tbody').append("<%=  j render partial: "questions/question" %>");
+<% if @question.errors.present?%>
+  $("#new_question").html("<%= j render partial: 'questions/form'%>");
+<% else %>
+  $(window.location.replace("/questions/<%= @question.id %>"));
+  <% publish_to "/questions" do %>
+    $('table.questions tbody').append("<%=  j render partial: "questions/question" %>");
+  <% end %>
 <% end %>

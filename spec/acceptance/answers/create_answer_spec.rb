@@ -30,7 +30,7 @@ feature 'Create answer for question', %q{
     fill_in "Body", with: "Small body answer"
     click_on "Save answer"
     within '#answer-form' do
-      expect(page).to have_content "1 error prohibited this answer from being saved:"
+      expect(page).to have_content "Body is too short"
     end
   end
 end

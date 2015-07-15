@@ -4,47 +4,33 @@ class QuestionsController < ApplicationController
 
   include Voted
 
+  respond_to  :js, only: [:create]
+
   def index
-    @questions = Question.all
+    respond_with(@questions = Question.all)
   end
 
-
   def show
-    @answer = Answer.new(:question => @question)
-    @answer.attachments.build
   end
 
   def new
-    @question = Question.new
-    @question.attachments.build
+    respond_with(@question = Question.new)
   end
 
   def edit
   end
 
   def create
-    @question = Question.new(question_params)
-    @question.user = current_user
-    if @question.save
-      flash[:notice] = "Your question successfully created"
-    else
-      render :new
-    end
+    respond_with(@question = Question.create(question_params.merge(user: current_user)))
   end
 
   def update
-    if @question.update(question_params)
-      flash[:notice] = "Your question successfully update"
-      redirect_to @question
-    else
-      render :edit
-    end
+    @question.update(question_params)
+    respond_with @question
   end
 
   def destroy
-    @question.destroy
-    flash[:notice] = "Your question successfully destroy"
-    redirect_to questions_path
+    respond_with(@question.destroy)
   end
 
   private

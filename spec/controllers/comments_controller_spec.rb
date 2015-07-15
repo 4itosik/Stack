@@ -49,11 +49,11 @@ describe CommentsController do
                           comment: attributes_for(:invalid_comment), format: :js }.to_not change(commentable.comments, :count)
           end
 
-          it "re-render new view" do
+          it "re-render form" do
             post :create, commentable: commentable.class.to_s.downcase.pluralize,
                  "#{commentable.class.to_s.downcase}_id": commentable,
                  comment: attributes_for(:invalid_comment), format: :js
-            expect(response).to render_template :new
+            expect(response).to render_template :create
           end
         end
 

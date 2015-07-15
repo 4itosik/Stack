@@ -44,9 +44,9 @@ describe AnswersController do
                                 answer: attributes_for(:invalid_answer), format: :js }.to_not change(Answer, :count)
       end
 
-      it "render new view" do
+      it "render error" do
         post :create,  question_id: question, answer: attributes_for(:invalid_answer), format: :js
-        expect(response).to render_template :new
+        expect(response).to render_template :create
       end
     end
   end
@@ -82,8 +82,8 @@ describe AnswersController do
           expect(answer.body).to eq "Test big body for answer for question"
         end
 
-        it "re-render edit view" do
-          expect(response).to render_template :edit
+        it "re-render form" do
+          expect(response).to render_template :update
         end
       end
     end

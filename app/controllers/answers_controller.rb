@@ -7,21 +7,21 @@ class AnswersController < ApplicationController
 
   include Voted
 
+  respond_to  :js
+
   def edit
   end
 
   def create
-    @answer = @question.answers.new(answer_params)
-    @answer.user = current_user
-    render :new unless @answer.save
+    respond_with(@answer = @question.answers.create(answer_params.merge(user: current_user)))
   end
 
   def update
-    render :edit unless @answer.update(answer_params)
+    respond_with(@answer.update(answer_params))
   end
 
   def destroy
-    @answer.destroy
+    respond_with(@answer.destroy)
   end
 
   def best
