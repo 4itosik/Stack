@@ -1,0 +1,15 @@
+Введите Ваш email, для авторизации через #{session[:auth].first.capitalize}
+= form_for @authorization do |f|
+  - if @authorization.errors.any?
+    #errorExplanation
+      %h2
+        = pluralize(@authorization.errors.count-1, "error")
+        prohibited this question from being saved:
+      %ul
+        - @authorization.errors.full_messages.each do |msg|
+          - unless msg == "Confirmation token can't be blank"
+            %li= msg
+  = f.label :email
+  = f.text_field  :email
+
+  %p=f.submit "Подтвердить"

@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: { omniauth_callbacks: 'omniauth_callbacks' }
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
@@ -33,6 +33,10 @@ Rails.application.routes.draw do
     resources :attachments, only: [:destroy]
     resources :votes, only: [:destroy], shallow: true
     resources :comments, only: [:new, :create], defaults: { commentable: 'questions' }
+  end
+
+  resources :authorizations, only: [:new, :create] do
+    get "confirmation", on: :collection
   end
   # Example resource route with options:
   #   resources :products do

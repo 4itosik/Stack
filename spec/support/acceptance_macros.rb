@@ -13,4 +13,15 @@ module AcceptanceMacros
     fill_in "Password confirmation", with: user.password_confirmation
     click_on "Sign up"
   end
+
+  def mock_auth_hash(provider, email = "test@test.ru")
+    OmniAuth.config.mock_auth[provider] = OmniAuth::AuthHash.new({
+      provider: provider.to_s,
+      uid: '12345',
+      info: {
+        name: 'Text',
+        email: email
+      }
+    })
+  end
 end

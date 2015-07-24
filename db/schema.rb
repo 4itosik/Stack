@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150706223931) do
+ActiveRecord::Schema.define(version: 20150721055428) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,6 +36,23 @@ ActiveRecord::Schema.define(version: 20150706223931) do
   end
 
   add_index "attachments", ["attachable_type", "attachable_id"], name: "index_attachments_on_attachable_type_and_attachable_id", using: :btree
+
+  create_table "authorizations", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "provider"
+    t.string   "uid"
+    t.string   "email"
+    t.string   "confirmation_token"
+    t.boolean  "confirmation",       default: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+  end
+
+  add_index "authorizations", ["confirmation"], name: "index_authorizations_on_confirmation", using: :btree
+  add_index "authorizations", ["confirmation_token"], name: "index_authorizations_on_confirmation_token", using: :btree
+  add_index "authorizations", ["email"], name: "index_authorizations_on_email", using: :btree
+  add_index "authorizations", ["provider", "uid"], name: "index_authorizations_on_provider_and_uid", using: :btree
+  add_index "authorizations", ["user_id"], name: "index_authorizations_on_user_id", using: :btree
 
   create_table "comments", force: :cascade do |t|
     t.text     "body"
