@@ -29,4 +29,8 @@ class User < ActiveRecord::Base
     end
     user
   end
+
+  def owner?(resource)
+    self == resource.user
+  end
 end

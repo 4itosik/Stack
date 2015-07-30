@@ -2,9 +2,10 @@ module Voted
   extend ActiveSupport::Concern
 
   included do
+    skip_authorize_resource only: [:like, :dislike, :cancel_vote]
+
     before_action :set_voteable, only: [:like, :dislike, :cancel_vote]
-    before_action :check_vote, only: [:like, :dislike]
-    before_action :owner_voteable, only: [:like, :dislike, :cancel_vote]
+    before_action :authorize_voteable, only: [:like, :dislike]
 
     respond_to :json, only: [:like, :dislike, :cancel_vote]
   end
@@ -22,13 +23,10 @@ module Voted
   end
 
   def cancel_vote
+    authorize! :cancel_vote, @voteable
     @vote = current_user.vote_for(@voteable)
-    if @vote
-      respond_with(@vote.destroy) do |format|
-        format.json { render_response }
-      end
-    else
-      render json: "You not onwer!", status: :unprocessable_entity
+    respond_with(@vote.destroy) do |format|
+      format.json { render_response }
     end
   end
 
@@ -41,15 +39,11 @@ module Voted
       controller_name.classify.constantize
     end
 
-    def owner_voteable
-      redirect_to root_url, notice: "Access denied" if @voteable.user == current_user
-    end
-
-    def check_vote
-      render json: "You have already voted for this #{@voteable.class.to_s.downcase}", status: :unprocessable_entity if @voteable.voted_by?(current_user)
-    end
-
     def render_response
       render 'shared/vote'
+    end
+
+    def authorize_voteable
+      authorize! :vote, @voteable
     end
 end

@@ -1,8 +1,7 @@
 class AttachmentsController < ApplicationController
-  before_action :load_attachment
-  before_action :owner_attachment
-
   respond_to  :js
+
+  load_and_authorize_resource
 
   def destroy
     respond_with(@attachment.destroy)
@@ -13,7 +12,4 @@ class AttachmentsController < ApplicationController
       @attachment = Attachment.find(params[:id])
     end
 
-    def owner_attachment
-      redirect_to root_url, notice: "Access denied" unless @attachment.attachable.user == current_user
-    end
 end

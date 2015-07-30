@@ -98,8 +98,8 @@ describe AnswersController do
         expect(answer.body).to eq "Test big body for answer for question"
       end
 
-      it "redirect to root path" do
-        expect(response).to redirect_to root_path
+      it "render forbidden" do
+        expect(response).to be_forbidden
       end
     end
   end
@@ -133,17 +133,18 @@ describe AnswersController do
         expect{ delete :destroy, id: answer, format: :js }.to_not change(Answer, :count)
       end
 
-      it "redirect to root path" do
+      it "render forbidden" do
         delete :destroy, id: answer, format: :js
-        expect(response).to redirect_to root_path
+        expect(response).to be_forbidden
       end
 
     end
   end
 
   describe "POST #best" do
+    login_user
+
     context "onwer select best answer" do
-      login_user
       let(:question) { create(:question, user: @user) }
       let(:answer) { create(:answer, question: question) }
 
@@ -162,10 +163,10 @@ describe AnswersController do
       let(:owner) { create(:user) }
       let(:question) { create(:question, user: owner) }
       let(:answer) { create(:answer, question: question) }
-      login_user
-      it "redirect to root path" do
+
+      it "render forbidden" do
         post :best, id: answer, format: :js
-        expect(response).to redirect_to root_path
+        expect(response).to be_forbidden
       end
     end
 
@@ -173,30 +174,31 @@ describe AnswersController do
 
 
   describe "POST #cancel_best" do
-    context "onwer select best answer" do
-      login_user
-      let(:question) { create(:question, user: @user) }
-      let(:best_answer) { create(:answer, question: question, best: true) }
+    login_user
 
-      before { post :cancel_best, id: answer, format: :js }
+    context "owner select best answer" do
+      let(:question) { create(:question, user: @user) }
+      let(:best_answer) { create(:best, question: question) }
+
+      before { post :cancel_best, id: best_answer, format: :js }
 
       it "cancel best answer" do
-        expect(answer.reload.best).to be false
+        expect(best_answer.reload.best).to be false
       end
 
-      it "render best template" do
+      it "render cancel best template" do
         expect(response).to render_template :cancel_best
       end
     end
 
-    context "non-onwer select best answer" do
+    context "non-owner select best answer" do
       let(:owner) { create(:user) }
       let(:question) { create(:question, user: owner) }
       let(:answer) { create(:answer, question: question) }
-      login_user
-      it "redirect to root path" do
+
+      it "render forbidden" do
         post :cancel_best, id: answer, format: :js
-        expect(response).to redirect_to root_path
+        expect(response).to be_forbidden
       end
     end
 

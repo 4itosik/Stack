@@ -1,6 +1,8 @@
 class AuthorizationsController < ApplicationController
   after_action  :clean_sessiion, only: [:create]
 
+  authorize_resource
+
   def new
     respond_with(@authorization = Authorization.new)
   end

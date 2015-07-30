@@ -23,9 +23,8 @@ feature 'Create question', %q{
 
   scenario "non-authenticated user create the question" do
     visit questions_path
-    click_on "Add question"
 
-    expect(page).to have_content "You need to sign in or sign up before continuing."
+    expect(page).to_not have_link "Add question"
   end
 
   scenario "Authenticated user create the question with invalid attributes", js: true do

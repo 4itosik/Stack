@@ -2,12 +2,12 @@ class AnswersController < ApplicationController
   before_action :load_question, only: [:create]
   before_action :load_answer, only: [:edit, :update, :best, :cancel_best, :destroy]
   before_action :set_question, only: [:best, :cancel_best, :update]
-  before_action :owner_answer, only: [:edit, :update, :destroy]
-  before_action :owner_question, only: [:best, :cancel_best]
 
   include Voted
 
   respond_to  :js
+
+  authorize_resource
 
   def edit
   end
@@ -51,11 +51,4 @@ class AnswersController < ApplicationController
       @question = @answer.question
     end
 
-    def owner_answer
-      redirect_to root_url, notice: "Access denied" unless @answer.user == current_user
-    end
-
-    def owner_question
-      redirect_to root_url, notice: "Access denied" unless @question.user == current_user
-    end
 end

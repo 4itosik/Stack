@@ -34,7 +34,7 @@ shared_examples "voted" do
 
         it "render json unprocessable entity" do
           post :like, id: voteable, format: :json
-          expect(response.status).to eq(422)
+          expect(response).to be_forbidden
         end
       end
     end
@@ -46,9 +46,9 @@ shared_examples "voted" do
         expect{ post :like, id: voteable_owner, format: :json }.to_not change(voteable.votes, :count)
       end
 
-      it "redirect to root path" do
+      it "render forbidden" do
         post :like, id: voteable_owner, format: :json
-        expect(response).to redirect_to root_path
+        expect(response).to be_forbidden
       end
     end
 
@@ -84,7 +84,7 @@ shared_examples "voted" do
 
         it "render json unprocessable entity" do
           post :dislike, id: voteable, format: :json
-          expect(response.status).to eq(422)
+          expect(response).to be_forbidden
         end
       end
 
@@ -97,9 +97,9 @@ shared_examples "voted" do
         expect{ post :dislike, id: voteable_owner, format: :json }.to_not change(voteable.votes, :count)
       end
 
-      it "redirect to root path" do
+      it "render forbidden" do
         post :dislike, id: voteable_owner, format: :json
-        expect(response).to redirect_to root_path
+        expect(response).to be_forbidden
       end
     end
   end
@@ -127,9 +127,9 @@ shared_examples "voted" do
         expect{ delete :cancel_vote, id: voteable , format: :json }.to_not change(voteable.votes, :count)
       end
 
-      it "redirect root path" do
+      it "render forbidden" do
         delete :cancel_vote, id: voteable , format: :json
-        expect(response.status).to eq(422)
+        expect(response).to be_forbidden
       end
     end
 

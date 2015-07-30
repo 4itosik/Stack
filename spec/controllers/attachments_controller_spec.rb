@@ -28,9 +28,9 @@ describe AttachmentsController do
           expect{ delete :destroy, question_id: question, id: attachment, format: :js }.to_not change(Attachment, :count)
         end
 
-        it "redirect to root path" do
+        it "render forbidden" do
           delete :destroy, question_id: question, id: attachment, format: :js
-          expect(response).to redirect_to root_path
+          expect(response).to be_forbidden
         end
 
       end
@@ -64,9 +64,9 @@ describe AttachmentsController do
           expect{ delete :destroy, answer_id: answer, id: attachment, format: :js }.to_not change(Attachment, :count)
         end
 
-        it "redirect to root path" do
+        it "render forbidden" do
           delete :destroy, answer_id: answer, id: attachment, format: :js
-          expect(response).to redirect_to root_path
+          expect(response).to be_forbidden
         end
 
       end

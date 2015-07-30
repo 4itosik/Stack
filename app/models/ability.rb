@@ -1,32 +1,57 @@
 class Ability
   include CanCan::Ability
 
+  attr_reader :user
+
   def initialize(user)
-    # Define abilities for the passed in user here. For example:
-    #
-    #   user ||= User.new # guest user (not logged in)
-    #   if user.admin?
-    #     can :manage, :all
-    #   else
-    #     can :read, :all
-    #   end
-    #
-    # The first argument to `can` is the action you are giving the user
-    # permission to do.
-    # If you pass :manage it will apply to every action. Other common actions
-    # here are :read, :create, :update and :destroy.
-    #
-    # The second argument is the resource the user can perform the action on.
-    # If you pass :all it will apply to every resource. Otherwise pass a Ruby
-    # class of the resource.
-    #
-    # The third argument is an optional hash of conditions to further filter the
-    # objects.
-    # For example, here the user can only update published articles.
-    #
-    #   can :update, Article, :published => true
-    #
-    # See the wiki for details:
-    # https://github.com/CanCanCommunity/cancancan/wiki/Defining-Abilities
+    @user = user
+
+    if user
+      user.admin? ? admin_abilities : user_abilities
+    else
+      guest_abilities
+    end
+  end
+
+  def guest_abilities
+    alias_action  :create, :confirmation, to: :confirm
+
+    can :read, :all
+    can :confirm, Authorization
+  end
+
+  def admin_abilities
+    can :manage, :all
+  end
+
+  def user_abilities
+    guest_abilities
+
+    alias_action  :create, :read, :update, :destroy, to: :crud
+
+    can :crud, [Question, Answer], user: user
+
+    can :create, Comment
+
+    can :manage, Attachment do |attachment|
+      user.owner?(attachment.attachable)
+    end
+
+    can :best, Answer do |answer|
+      user.owner?(answer.question) && answer.best == false
+    end
+
+    can :cancel_best, Answer do |answer|
+      user.owner?(answer.question) && answer.best == true
+    end
+
+    can :vote, [Answer, Question] do |voteable|
+      !user.owner?(voteable) && !voteable.voted_by?(user)
+    end
+
+    can :cancel_vote, [Answer, Question] do |voteable|
+      !user.owner?(voteable) && voteable.voted_by?(user)
+    end
+
   end
 end

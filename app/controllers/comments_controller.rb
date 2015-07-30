@@ -3,6 +3,8 @@ class CommentsController < ApplicationController
 
   respond_to  :js
 
+  authorize_resource
+
   def new
     respond_with(@comment = @commentable.comments.new)
   end

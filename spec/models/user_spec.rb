@@ -108,4 +108,20 @@ RSpec.describe User, type: :model do
       end
     end
   end
+
+  describe "#owner?" do
+    context "return true" do
+      let(:user) { create(:user) }
+      let(:question) { create(:question, user: user) }
+
+      it { expect(user.owner?(question)).to be_truthy }
+    end
+
+    context "return false" do
+      let(:user) { create(:user) }
+      let(:question) { create(:question) }
+
+      it { expect(user.owner?(question)).to be_falsey }
+    end
+  end
 end
