@@ -1,9 +1,5 @@
-class Api::V1::ProfilesController < ApplicationController
-  before_action :doorkeeper_authorize!
-
+class Api::V1::ProfilesController < Api::V1::BaseController
   authorize_resource class: false
-
-  respond_to  :json
 
   def me
     respond_with current_resource_owner

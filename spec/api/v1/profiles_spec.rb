@@ -55,6 +55,7 @@ describe "Profile API" do
       let(:me) { create(:user) }
       let!(:users) { create_list(:user, 3) }
       let(:access_token) { create(:access_token, resource_owner_id: me.id) }
+      let(:user) { users.first }
 
       before { get '/api/v1/profiles', format: :json, access_token: access_token.token }
 
@@ -63,7 +64,7 @@ describe "Profile API" do
       end
 
       it "contains list of users" do
-        expect(response.body).to be_json_eql(users.to_json)
+        expect(response.body).to be_json_eql(users.to_json).at_path("profiles")
       end
 
       it "contains not have me" do
@@ -72,17 +73,13 @@ describe "Profile API" do
 
       %w(email id created_at updated_at admin).each do |attr|
         it "user contains #{attr}" do
-          users.each_with_index do |user, index|
-            expect(response.body).to be_json_eql(user.send(attr.to_sym).to_json).at_path("#{index}/#{attr}")
-          end
+          expect(response.body).to be_json_eql(user.send(attr.to_sym).to_json).at_path("profiles/0/#{attr}")
         end
       end
 
       %w(password encrypted_password).each do |attr|
         it "user contains #{attr}" do
-          users.each_with_index do |user, index|
-            expect(response.body).to_not have_json_path("#{index}/#{attr}")
-          end
+          expect(response.body).to_not have_json_path("questions/0/#{attr}")
         end
       end
     end
