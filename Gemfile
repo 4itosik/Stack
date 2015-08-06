@@ -55,6 +55,7 @@ group :test do
   gem 'capybara-webkit'
   gem 'database_cleaner'
   gem 'capybara-email'
+  gem 'json_spec'
 end
 group :development do 
   gem 'guard-livereload', '~> 2.4', require: false
@@ -74,3 +75,4 @@ gem 'omniauth'
 gem 'omniauth-facebook'
 gem 'omniauth-twitter'
 gem 'cancancan', '~> 1.10'
+gem 'doorkeeper'

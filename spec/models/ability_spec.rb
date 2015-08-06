@@ -81,5 +81,7 @@ describe Ability do
     end
 
     it { should be_able_to :create, Comment }
+
+    it { should be_able_to  :manage, :profile }
   end
 end

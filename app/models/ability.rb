@@ -33,6 +33,8 @@ class Ability
 
     can :create, Comment
 
+    can :manage, :profile
+
     can :manage, Attachment do |attachment|
       user.owner?(attachment.attachable)
     end
