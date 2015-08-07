@@ -45,6 +45,9 @@ Rails.application.routes.draw do
       resources :profiles, only: [:index] do
         get :me, on: :collection
       end
+      resources :questions, only: [:index, :create, :show] do
+        resources :answers, only: [:index, :create, :show]
+      end
     end
   end
   # Example resource route with options:
