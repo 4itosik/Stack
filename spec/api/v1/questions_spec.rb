@@ -2,17 +2,7 @@ require 'rails_helper'
 
 describe "Questions API" do
   describe "/index" do
-    context "unauthorized" do
-      it "return 401 status if there is no access_token" do
-        get "/api/v1/questions", format: :json
-        expect(response).to have_http_status 401
-      end
-
-      it "return 401 status if invalid access_token" do
-        get "/api/v1/questions", format: :json, access_token: "12345"
-        expect(response).to have_http_status 401
-      end
-    end
+    it_behaves_like "API Authenticable"
 
     context "authorized" do
       let(:access_token) { create(:access_token) }
@@ -35,23 +25,17 @@ describe "Questions API" do
         end
       end
     end
+
+    def do_request(options = {})
+      get "/api/v1/questions", { format: :json }.merge(options)
+    end
   end
 
 
   describe "/show" do
     let(:question) { create(:question) }
 
-    context "unauthorized" do
-      it "return 401 status if there is no access_token" do
-        get "/api/v1/questions/#{question.id}", format: :json
-        expect(response).to have_http_status 401
-      end
-
-      it "return 401 status if invalid access_token" do
-        get "/api/v1/questions/#{question.id}", format: :json, access_token: "12345"
-        expect(response).to have_http_status 401
-      end
-    end
+    it_behaves_like "API Authenticable"
 
     context "authorized" do
       let!(:comment) { create(:comment, commentable: question) }
@@ -94,20 +78,14 @@ describe "Questions API" do
         end
       end
     end
+
+    def do_request(options = {})
+      get "/api/v1/questions/#{question.id}", { format: :json }.merge(options)
+    end
   end
 
   describe "/create" do
-    context "unauthorized" do
-      it "return 401 status if there is no access_token" do
-        post "/api/v1/questions", question: attributes_for(:question), format: :json
-        expect(response).to have_http_status 401
-      end
-
-      it "return 401 status if invalid access_token" do
-        post "/api/v1/questions", question: attributes_for(:question), format: :json, access_token: "12345"
-        expect(response).to have_http_status 401
-      end
-    end
+    it_behaves_like "API Authenticable"
 
     context "authorized" do
       let(:me) { create(:user) }
@@ -150,6 +128,10 @@ describe "Questions API" do
           expect(response.body).to have_json_size(2).at_path("errors")
         end
       end
+    end
+
+    def do_request(options = {})
+      post "/api/v1/questions", { question: attributes_for(:question), format: :json }.merge(options)
     end
   end
 end

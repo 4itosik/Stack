@@ -1,6 +1,4 @@
-require "rails_helper"
-
-shared_examples "voteable" do
+shared_examples_for "voteable" do
   it { should have_many(:votes).dependent(:destroy) }
 
   describe "#total_votes" do

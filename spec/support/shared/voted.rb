@@ -1,6 +1,4 @@
-require "rails_helper"
-
-shared_examples "voted" do
+shared_examples_for "voted" do
   login_user
 
   let(:voteable_name) { described_class.controller_name.singularize.underscore }
