@@ -15,6 +15,8 @@ class Answer < ActiveRecord::Base
 
   accepts_nested_attributes_for :attachments, :reject_if => :all_blank, :allow_destroy => true
 
+  after_create  :send_information
+
   def select_best
     transaction do
       question.answers.update_all(best: false)
@@ -26,4 +28,9 @@ class Answer < ActiveRecord::Base
     transaction { update!(best: false) }
   end
 
+  private
+
+  def send_information
+    NewAnswerJob.perform_later(self)
+  end
 end

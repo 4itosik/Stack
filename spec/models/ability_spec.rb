@@ -80,6 +80,15 @@ describe Ability do
       it { should_not be_able_to :cancel_best, other_answer, user: user }
     end
 
+    context "subscribe question" do
+      let(:question) { create(:question) }
+      let(:subscribe) { create(:subscribe, user: user, question: question) }
+
+      it { should be_able_to  :subscribe, question, user: user }
+      it { subscribe
+          should_not be_able_to  :subscribe, question, user: user}
+    end
+
     it { should be_able_to :create, Comment }
 
     it { should be_able_to  :manage, :profile }

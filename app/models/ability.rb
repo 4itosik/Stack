@@ -55,5 +55,8 @@ class Ability
       !user.owner?(voteable) && voteable.voted_by?(user)
     end
 
+    can :subscribe, Question do |question|
+      !question.subscribe?(user)
+    end
   end
 end

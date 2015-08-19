@@ -184,7 +184,43 @@ describe QuestionsController do
         expect(response).to redirect_to root_path
       end
     end
+  end
 
+  describe "POST #subscribe" do
+    login_user
+    let(:url) { post :subscribe, id: question, format: :js }
+
+    context "user non-subscribe for question" do
+      it "create new subscribe for question" do
+        expect { url }.to change(question.subscribes, :count).by(1)
+      end
+
+      it "add subscribe for user" do
+        expect { url }.to change(@user.subscribes, :count).by(1)
+      end
+
+      it "render subscribe" do
+        url
+        expect(response).to render_template :subscribe
+      end
+    end
+
+    context "user subscribe for question" do
+      let!(:subscribe) { create(:subscribe, user: @user, question: question) }
+
+      it "not create new subscribe for question" do
+        expect { url }.to_not change(Subscribe, :count)
+      end
+
+      it "not add subscribe for user" do
+        expect { url }.to_not change(Subscribe, :count)
+      end
+
+      it "render subscribe" do
+        url
+        expect(response).to be_forbidden
+      end
+    end
   end
 
 end

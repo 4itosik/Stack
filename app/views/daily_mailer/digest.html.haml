@@ -1,0 +1,4 @@
+%p Привет, #{@user.email}
+%p Список вопросов за прошедший день:
+- @questions.each do |quesiton|
+  %p= link_to quesiton.title, question_url(quesiton)

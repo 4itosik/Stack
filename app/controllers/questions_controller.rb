@@ -1,9 +1,11 @@
 class QuestionsController < ApplicationController
+  before_action :find_question, only: [:subscribe]
+
   load_and_authorize_resource
 
   include Voted
 
-  respond_to  :js, only: [:create]
+  respond_to  :js, only: [:create, :subscribe]
 
   def index
     respond_with(@questions = Question.all)
@@ -32,9 +34,16 @@ class QuestionsController < ApplicationController
     respond_with(@question.destroy)
   end
 
+  def subscribe
+    respond_with(@question.subscribes.create(user: current_user))
+  end
+
   private
     def question_params
       params.require(:question).permit(:body, :title, attachments_attributes: [:id, :file, :_destroy])
     end
 
+    def find_question
+      @question = Question.find(params[:id])
+    end
 end

@@ -8,6 +8,7 @@ class User < ActiveRecord::Base
   has_many  :answers, dependent: :destroy
   has_many  :votes, dependent: :destroy
   has_many  :authorizations, dependent: :destroy
+  has_many  :subscribes, dependent: :destroy
 
   def vote_for(voteable)
     votes.find_by(voteable: voteable)
@@ -32,5 +33,11 @@ class User < ActiveRecord::Base
 
   def owner?(resource)
     self == resource.user
+  end
+
+  def self.send_daily_digest
+    find_each do |user|
+      DailyMailer.digest(user).deliver_later
+    end
   end
 end

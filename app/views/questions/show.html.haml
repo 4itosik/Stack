@@ -11,7 +11,13 @@
 
   %p= @question.title
   %p= @question.body
-
+  %hr/
+  #subscribe
+    - if can?(:subscribe, @question)
+      = link_to "Подписаться", subscribe_question_path(@question), method: :post, remote: true
+    - else
+      %p Вы подписаны на данный вопрос
+  %hr/
   %p Attachments
   %ul
     - @question.attachments.each do |attachment|

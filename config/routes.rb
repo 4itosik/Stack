@@ -24,6 +24,7 @@ Rails.application.routes.draw do
   end
 
   resources :questions, concerns: [:voteable] do
+    post "subscribe", on: :member
     resources :answers, except: [:new], concerns: [:voteable], shallow: true do
       post "best", on: :member
       post "cancel_best", on: :member

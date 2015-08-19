@@ -36,4 +36,19 @@ describe Answer do
     answer.cancel_best
     expect(answer.best).to be false
   end
+
+  describe "#send_information" do
+    subject { build(:answer) }
+
+    it 'should subscribe after creating' do
+      expect(NewAnswerJob).to receive(:perform_later).with(subject)
+      subject.save!
+    end
+
+    it 'should not subscribe after update' do
+      subject.save!
+      expect(NewAnswerJob).to_not receive(:perform_later)
+      subject.update(body: '123')
+    end
+  end
 end
