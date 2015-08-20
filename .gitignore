@@ -15,3 +15,5 @@
 /config/database.yml
 .DS_Store
 /public/uploads/
+config/*.sphinx.conf
+db/sphinx
