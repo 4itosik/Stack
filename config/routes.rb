@@ -51,6 +51,8 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  get '/search' => "searchs#index", as: :search
   # Example resource route with options:
   #   resources :products do
   #     member do

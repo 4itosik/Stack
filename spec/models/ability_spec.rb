@@ -12,6 +12,7 @@ describe Ability do
 
     it { should be_able_to  :confirm, Authorization }
     it { should_not be_able_to :manage, :all }
+    it { should be_able_to  :index, Search }
   end
 
   describe "for admin" do

@@ -18,6 +18,7 @@ class Ability
 
     can :read, :all
     can :confirm, Authorization
+    can :index, Search
   end
 
   def admin_abilities

@@ -29,4 +29,7 @@
       .variables.hide{"data-user-id": "#{current_user.id}"}
     %p.notice= notice
     %p.alert= alert
+    %hr/
+    = render "layouts/search"
+    %hr/
     = yield

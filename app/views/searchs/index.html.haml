@@ -1,0 +1,7 @@
+- @searchs.each do |search|
+  - if search.try(:title)
+    %p= search.try(:title)
+  - elsif search.try(:body)
+    %p= search.try(:body)
+  - else
+    %p= search.try(:email)
