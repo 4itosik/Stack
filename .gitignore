@@ -17,3 +17,4 @@
 /public/uploads/
 config/*.sphinx.conf
 db/sphinx
+config/private_pub.yml
