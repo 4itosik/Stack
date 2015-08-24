@@ -45,7 +45,7 @@ group :development, :test do
   gem 'pry-rails'
   gem 'pry-byebug'
 end
-gem 'bootstrap-sass', '~> 3.3.4'
+
 group :test do
   gem 'rspec-rails'
   gem 'factory_girl_rails', :require => false
@@ -62,6 +62,11 @@ group :development do
   gem "better_errors"
   gem 'guard-rspec', require: false
   gem "letter_opener"
+
+  gem 'capistrano', require: false
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano-rails', require: false
+  gem 'capistrano-rvm', require: false
 end
 gem "haml-rails"
 gem "devise"
@@ -83,3 +88,7 @@ gem 'delayed_job_active_record'
 gem 'whenever'
 gem 'mysql2'
 gem 'thinking-sphinx'
+gem 'dotenv'
+gem 'dotenv-deployment', require: 'dotenv/deployment'
+gem 'therubyracer'
+gem 'bootstrap-sass', '~> 3.3.4'
