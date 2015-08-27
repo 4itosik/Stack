@@ -1,39 +1,41 @@
-%p Question
-.col-xs-12{:id => "question_#{@question.id}"}
+- cache object_cache_key_for(@question, current_user) do
+  %p Question
+  .col-xs-12{:id => "question_#{@question.id}"}
 
-  %p.total_votes= @question.total_votes
-  %p.votes
-    - if can?(:vote, @question)
-      = link_to "Like", like_question_path(@question), method: :post, remote: true, data: { type: :json }, class: "vote"
-      = link_to "Dislike", dislike_question_path(@question), method: :post, remote: true, data: { type: :json }, class: "vote"
-    - elsif can?(:cancel_vote, @question)
-      = link_to "Cancel", cancel_vote_question_path(@question), method: :delete, remote: true, class: 'vote-cancel', data: { type: :json }
+    %p.total_votes= @question.total_votes
+    %p.votes
+      - if can?(:vote, @question)
+        = link_to "Like", like_question_path(@question), method: :post, remote: true, data: { type: :json }, class: "vote"
+        = link_to "Dislike", dislike_question_path(@question), method: :post, remote: true, data: { type: :json }, class: "vote"
+      - elsif can?(:cancel_vote, @question)
+        = link_to "Cancel", cancel_vote_question_path(@question), method: :delete, remote: true, class: 'vote-cancel', data: { type: :json }
 
-  %p= @question.title
-  %p= @question.body
+    %p= @question.title
+    %p= @question.body
+    %hr/
+    #subscribe
+      - if can?(:subscribe, @question)
+        = link_to "Подписаться", subscribe_question_path(@question), method: :post, remote: true
+      - else
+        %p Вы подписаны на данный вопрос
+    %hr/
+    %p Attachments
+    %ul
+      - @question.attachments.each do |attachment|
+        %li{id: "attachment_#{attachment.id}"}
+          %p= link_to attachment.file.identifier, attachment.file.url
+          %p= link_to "Delete attachment", polymorphic_path([@question, attachment]),remote: true, :method => :delete, class: "btn btn-sm btn-danger" if can?(:manage, attachment)
+    = render partial: "comments/commentable", locals: { commentable: @question }
   %hr/
-  #subscribe
-    - if can?(:subscribe, @question)
-      = link_to "Подписаться", subscribe_question_path(@question), method: :post, remote: true
-    - else
-      %p Вы подписаны на данный вопрос
-  %hr/
-  %p Attachments
-  %ul
-    - @question.attachments.each do |attachment|
-      %li{id: "attachment_#{attachment.id}"}
-        %p= link_to attachment.file.identifier, attachment.file.url
-        %p= link_to "Delete attachment", polymorphic_path([@question, attachment]),remote: true, :method => :delete, class: "btn btn-sm btn-danger" if can?(:manage, attachment)
-  = render partial: "comments/commentable", locals: { commentable: @question }
-%hr/
-Answers:
-.col-xs-12.answers
-  = render "answers/answers"
-- if can?(:create, Answer)
-  %hr/
-  New answer
-  #answer-form
-    = render "answers/form"
+  Answers:
+  .col-xs-12.answers
+    = render "answers/answers"
+- cache cache_key_form("create_answer", current_user) do
+  - if can?(:create, Answer)
+    %hr/
+    New answer
+    #answer-form
+      = render "answers/form"
 
 
 = subscribe_to "/questions/#{@question.id}/answers"

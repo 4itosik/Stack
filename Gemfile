@@ -62,6 +62,7 @@ group :development do
   gem "better_errors"
   gem 'guard-rspec', require: false
   gem "letter_opener"
+  gem 'quiet_assets'
 
   gem 'capistrano', require: false
   gem 'capistrano-bundler', require: false

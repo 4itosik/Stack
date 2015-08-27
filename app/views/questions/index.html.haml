@@ -9,11 +9,12 @@
       %td
       %td
   %tbody
-    - @questions.each do |question|
-      %tr
-        %td=link_to question.title, question_path(question)
-        %td= question.body
-        %td= link_to "Edit question", edit_question_path(question), :class => "btn btn-xs btn-warning" if can?(:crud, question)
-        %td= link_to "Delete question", question_path(question), :method => :delete, :class => "btn btn-xs btn-destroy" if can?(:crud, question)
+    - cache collection_cache_key_for(:question, current_user) do
+      - @questions.each do |question|
+        %tr
+          %td=link_to question.title, question_path(question)
+          %td= question.body
+          %td= link_to "Edit question", edit_question_path(question), :class => "btn btn-xs btn-warning" if can?(:crud, question)
+          %td= link_to "Delete question", question_path(question), :method => :delete, :class => "btn btn-xs btn-destroy" if can?(:crud, question)
 
 = subscribe_to "/questions"

@@ -2,7 +2,8 @@
 %hr/
 .comments
   - commentable.comments.each do |comment|
-    .comment
-      %p= comment.user.email
-      %p= comment.body
+    - cache comment do
+      .comment
+        %p= comment.user.email
+        %p= comment.body
 .comment-form
