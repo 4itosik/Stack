@@ -1,30 +1,26 @@
 - @question.answers.each do |answer|
-  - cache object_cache_key_for(answer, current_user) do
-    .answer{:id => "answer_#{answer.id}"}
+  .answer{:id => "answer_#{answer.id}"}
+    - cache answer do
       %p.total_votes= answer.total_votes
-      %p.votes
-        - if can?(:vote, answer)
-          = link_to "Like", like_answer_path(answer), method: :post, remote: true, data: { type: :json }, class: "vote"
-          = link_to "Dislike", dislike_answer_path(answer), method: :post, remote: true, data: { type: :json }, class: "vote"
-        - elsif can?(:cancel_vote, answer)
-          = link_to "Cancel", cancel_vote_answer_path(answer), method: :delete, remote: true, class: 'vote-cancel', data: { type: :json }
-      %p
-        - if can?(:best, answer)
-          = link_to "Выбрать лучшим", best_answer_path(answer), remote: true, method: :post
-        - elsif can?(:cancel_best, answer)
-          = link_to "Отменить лучший ответ", cancel_best_answer_path(answer), remote: true, method: :post
-        - elsif answer.best == true
-          Лучший ответ
-      %p= answer.body
-      %p Attachments
-      %ul.attachments
-        - answer.attachments.each do |attachment|
-          %li{id: "attachment_#{attachment.id}"}
-            %p= link_to attachment.file.identifier, attachment.file.url
-            %p= link_to "Delete attachment", attachment_path(attachment),remote: true, :method => :delete, class: "btn btn-sm btn-danger" if can?(:delete, attachment)
+    %p.votes
+      = render partial: "shared/votes", locals: { voteable: answer }
+    %p
+      - if can?(:best, answer)
+        = link_to "Выбрать лучшим", best_answer_path(answer), remote: true, method: :post
+      - elsif can?(:cancel_best, answer)
+        = link_to "Отменить лучший ответ", cancel_best_answer_path(answer), remote: true, method: :post
+      - elsif answer.best == true
+        Лучший ответ
+    %p= answer.body
+    %p Attachments
+    %ul.attachments
+      - answer.attachments.each do |attachment|
+        %li{id: "attachment_#{attachment.id}"}
+          %p= link_to attachment.file.identifier, attachment.file.url
+          %p= link_to "Delete attachment", attachment_path(attachment),remote: true, :method => :delete, class: "btn btn-sm btn-danger" if can?(:delete, attachment)
 
-      .controls
-      %p= link_to "Edit answer", edit_answer_path(answer), :class => "btn btn-xs btn-warning", remote: true if can?(:crud, answer)
-      %p= link_to "Delete answer", answer_path(answer), remote: true, :method => :delete, :class => "btn btn-xs btn-danger" if can?(:crud, answer)
-      %p.edit-answer
-      = render partial: "comments/commentable", locals: { commentable: answer }
+    .controls
+    %p= link_to "Edit answer", edit_answer_path(answer), :class => "btn btn-xs btn-warning", remote: true if can?(:crud, answer)
+    %p= link_to "Delete answer", answer_path(answer), remote: true, :method => :delete, :class => "btn btn-xs btn-danger" if can?(:crud, answer)
+    %p.edit-answer
+    = render partial: "comments/commentable", locals: { commentable: answer }

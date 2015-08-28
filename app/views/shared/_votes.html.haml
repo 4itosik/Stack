@@ -1,0 +1,5 @@
+- if can?(:vote, voteable)
+  = link_to "Like", polymorphic_path(voteable, action: "like"), method: :post, remote: true, data: { type: :json }, class: "vote"
+  = link_to "Dislike", polymorphic_path(voteable, action: "dislike"), method: :post, remote: true, data: { type: :json }, class: "vote"
+- elsif can?(:cancel_vote, voteable)
+  = link_to "Cancel", polymorphic_path(voteable, action: "cancel_vote"), method: :delete, remote: true, class: 'vote-cancel', data: { type: :json }
